@@ -22,8 +22,7 @@ export const Header = () => {
             className={`flex items-center px-4 py-2 rounded-lg transition-colors ${isActive('/explore') ? 'bg-[#1E2128] text-white' : 'text-gray-400 hover:text-white hover:bg-[#1E2128]/50'}`}
           >
             <img
-              src='/images/explore.png'
-              color='white'
+              src={isActive('/explore') ? '/images/explore-active.png' : '/images/explore.png'}
               alt="Explore"
               className="w-5 h-5 mr-2"
             />
@@ -31,11 +30,11 @@ export const Header = () => {
           </button>
           <button
             onClick={() => navigate('/launch')}
-            className={`flex items-center px-4 py-2 rounded-lg transition-colors ${isActive('/stake') ? 'bg-[#1E2128] text-white' : 'text-gray-400 hover:text-white hover:bg-[#1E2128]/50'}`}
+            className={`flex items-center px-4 py-2 rounded-lg transition-colors ${isActive('/launch') ? 'bg-[#1E2128] text-white' : 'text-gray-400 hover:text-white hover:bg-[#1E2128]/50'}`}
           >
             <img
-              src='/images/launch.png'
-              alt="Explore"
+              src={isActive('/launch') ? '/images/launch-active.png' : '/images/launch.png'}
+              alt="Launch"
               className="w-5 h-5 mr-2"
             />
             Launch
