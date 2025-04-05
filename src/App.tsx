@@ -1,13 +1,11 @@
 import { Header } from './components/layout/Header';
 import { Hero } from './components/layout/Hero';
-import { Footer } from './components/layout/Footer';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { WalletContextProvider } from './components/WalletContextProvider';
 
 import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
 import { clusterApiUrl } from '@solana/web3.js';
-import React from 'react';
 import { Explore } from './components/pages/Explore';
 import { ProjectDetail } from './components/pages/ProjectDetail';
 
@@ -29,7 +27,6 @@ function App() {
                     <Route path="/detail" element={<ProjectDetail />} />
                   </Routes>
                 </main>
-                <Footer />
               </div>
             </WalletContextProvider>
           </WalletModalProvider>
