@@ -1,56 +1,54 @@
 import { useParams } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { fetchLsts, LstData, LstMetadata } from '../../services/api';
 
 export const ProjectDetail = () => {
   const { projectId } = useParams();
   const [stakeAmount, setStakeAmount] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [lstData, setLstData] = useState<LstData | null>(null);
+  const [lstMetadata] = useState<LstMetadata | null>(null);
 
-  // Mock project data - In real app, this would come from an API or state management
-  const projectData = {
-    alpha: {
-      name: 'Project Alpha',
-      description: 'An innovative DeFi lending platform offering cross-chain capabilities and automated market maker functionality.',
-      features: [
-        'DeFi Lending Platform',
-        'Cross-chain Capabilities',
-        'Automated Market Maker',
-        'Real-time Reward Distribution',
-        'Community Governance'
-      ],
-      apy: 18,
-      totalStaked: '1,234,567 SOL',
-      stakersCount: '3,456',
-      minStake: '10 SOL',
-      maxStake: '50,000 SOL',
-      logo: '/images/doge-coin.png'
-    },
-    beta: {
-      name: 'Project Beta',
-      description: 'A next-generation DeFi protocol featuring innovative yield optimization strategies and high security.',
-      features: [
-        'Yield Optimization Algorithm',
-        'Multi-sig Security',
-        'Smart Contract Automation',
-        'Liquidity Mining',
-        'NFT Staking'
-      ],
-      apy: 22,
-      totalStaked: '987,654 SOL',
-      stakersCount: '2,789',
-      minStake: '5 SOL',
-      maxStake: '100,000 SOL',
-      logo: '/images/doge-coin.png'
-    }
-  };
+  useEffect(() => {
+    const fetchProjectData = async () => {
+      try {
+        const lsts = await fetchLsts();
+        const lst = lsts.find((lst) => lst.mint === projectId);
 
-  const project = projectData[projectId as keyof typeof projectData];
+        if (lst == null) {
+          setError('Project not found');
+          setLoading(false);
+          return;
+        }
 
-  if (!project) {
+        setLstData(lst);
+      } catch (err) {
+        setError('Failed to fetch project data');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjectData();
+  }, [projectId]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#1A1C2D] text-white flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold mb-4">Loading...</h1>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !lstData) {
     return (
       <div className="min-h-screen bg-[#1A1C2D] text-white flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-4xl font-bold mb-4">Project Not Found</h1>
-          <p className="text-gray-400">The requested project does not exist.</p>
+          <p className="text-gray-400">{error || 'The requested project does not exist.'}</p>
         </div>
       </div>
     );
@@ -58,58 +56,110 @@ export const ProjectDetail = () => {
 
   const handleStake = () => {
     // Implement staking logic here
-    console.log(`Staking ${stakeAmount} SOL to ${project.name}`);
+    console.log(`Staking ${stakeAmount} SOL to ${lstData.name}`);
   };
 
   return (
-    <div className="min-h-screen bg-[#1A1C2D] text-gray-800 pt-16">
+    <div className="min-h-screen bg-[#1A1C2D] text-white pt-16">
       <div className="container mx-auto px-4 py-16 max-w-4xl">
         {/* Project Header */}
-        <div className="flex items-center gap-6 mb-12">
-          <img src={project.logo} alt={project.name} className="w-20 h-20 rounded-full shadow-lg" />
-          <div>
-            <h1 className="text-4xl font-bold mb-2 text-green-600">{project.name}</h1>
-            <p className="text-gray-600 text-lg">{project.description}</p>
+        <div className="flex items-center gap-6 mb-8">
+          <img src={lstData.meta?.["Mint logo URL"]} alt={lstData.name} className="w-20 h-20 rounded-full shadow-lg" />
+          <div className="flex-1">
+            <div className="flex items-center gap-3 mb-2">
+              <h1 className="text-4xl font-bold text-green-500">{lstData.meta?.["Mint name"]}</h1>
+              <span className="text-gray-400 text-lg">{lstData.meta?.["Mint symbol"]}</span>
+            </div>
+            <p className="text-gray-300 text-lg mb-2">{lstData.meta?.["One-liner"]}</p>
+            <div className="flex gap-2">
+              {lstData.meta?.Categories?.split(", ").map((category, index) => (
+                <span key={index} className="px-3 py-1 bg-green-500/10 text-green-400 rounded-full text-sm">
+                  {category}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className="flex gap-3">
+            {lstData.meta?.Website && (
+              <a
+                href={lstData.meta.Website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 bg-gray-700 rounded-full hover:bg-gray-600 transition-colors"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                </svg>
+              </a>
+            )}
+            {lstData.meta?.Twitter && (
+              <a
+                href={`https://twitter.com/${lstData.meta.Twitter}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 bg-gray-700 rounded-full hover:bg-gray-600 transition-colors"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
+              </a>
+            )}
+            {lstData.meta?.["TG group link"] && (
+              <a
+                href={lstData.meta["TG group link"]}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 bg-gray-700 rounded-full hover:bg-gray-600 transition-colors"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                </svg>
+              </a>
+            )}
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Left Column - Project Info */}
           <div className="space-y-8">
-            {/* Key Statistics */}
-            <div className="bg-gray-100 p-6 rounded-2xl shadow hover:shadow-md transition duration-300 border">
-              <h2 className="text-2xl font-bold mb-6 text-green-600">Key Statistics</h2>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <p className="text-gray-600 mb-1">Expected Returns</p>
-                  <p className="text-2xl font-bold text-green-500">{project.apy}% APY</p>
-                </div>
-                <div>
-                  <p className="text-gray-600 mb-1">Total Staked</p>
-                  <p className="text-2xl font-bold text-gray-800">{project.totalStaked}</p>
-                </div>
-                <div>
-                  <p className="text-gray-600 mb-1">Total Stakers</p>
-                  <p className="text-2xl font-bold text-gray-800">{project.stakersCount}</p>
-                </div>
-                <div>
-                  <p className="text-gray-600 mb-1">Minimum Stake</p>
-                  <p className="text-2xl font-bold text-gray-800">{project.minStake}</p>
-                </div>
-              </div>
-            </div>
-
             {/* Features */}
-            <div className="bg-gray-100 p-6 rounded-2xl shadow hover:shadow-md transition duration-300 border">
-              <h2 className="text-2xl font-bold mb-6 text-green-600">Key Features</h2>
-              <ul className="space-y-3">
-                {project.features.map((feature, index) => (
-                  <li key={index} className="flex items-center gap-3">
-                    <span className="text-green-500">•</span>
-                    <span className="text-gray-700">{feature}</span>
-                  </li>
-                ))}
-              </ul>
+            <div className="bg-[#1F2937] p-6 rounded-2xl shadow hover:shadow-md transition duration-300">
+              <h2 className="text-2xl font-bold mb-6 text-green-500">Key Features</h2>
+              <div className="space-y-4">
+                <div>
+                  <h3 className="text-lg font-semibold mb-2 text-gray-300">Main Value Proposition</h3>
+                  <p className="text-gray-400">{lstData.meta?.["Main value proposition"]}</p>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold mb-2 text-gray-300">Key Points</h3>
+                  <ul className="space-y-2">
+                    {lstData.meta?.["First bullet point"] && (
+                      <li className="flex items-start gap-2">
+                        <span className="text-green-500 mt-1">•</span>
+                        <span className="text-gray-400">{lstData.meta["First bullet point"]}</span>
+                      </li>
+                    )}
+                    {lstData.meta?.["Second bullet point"] && (
+                      <li className="flex items-start gap-2">
+                        <span className="text-green-500 mt-1">•</span>
+                        <span className="text-gray-400">{lstData.meta["Second bullet point"]}</span>
+                      </li>
+                    )}
+                    {lstData.meta?.["Third bullet point"] && (
+                      <li className="flex items-start gap-2">
+                        <span className="text-green-500 mt-1">•</span>
+                        <span className="text-gray-400">{lstData.meta["Third bullet point"]}</span>
+                      </li>
+                    )}
+                  </ul>
+                </div>
+                {lstData.meta?.["Vote account"] && (
+                  <div>
+                    <h3 className="text-lg font-semibold mb-2 text-gray-300">Vote Account</h3>
+                    <p className="text-gray-400 font-mono text-sm">{lstData.meta["Vote account"]}</p>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
@@ -132,21 +182,6 @@ export const ProjectDetail = () => {
                   </div>
                 </div>
 
-                <div className="bg-white p-4 rounded-lg space-y-3 border border-gray-200">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Estimated Daily Rewards</span>
-                    <span className="font-semibold text-gray-800">
-                      {stakeAmount ? `${(Number(stakeAmount) * project.apy / 365).toFixed(2)} SOL` : '0.00 SOL'}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Estimated Annual Rewards</span>
-                    <span className="font-semibold text-gray-800">
-                      {stakeAmount ? `${(Number(stakeAmount) * project.apy / 100).toFixed(2)} SOL` : '0.00 SOL'}
-                    </span>
-                  </div>
-                </div>
-
                 <button
                   onClick={handleStake}
                   disabled={!stakeAmount}
@@ -154,10 +189,6 @@ export const ProjectDetail = () => {
                 >
                   Start Staking
                 </button>
-
-                <p className="text-sm text-gray-600 text-center">
-                  Min Stake: {project.minStake} • Max Stake: {project.maxStake}
-                </p>
               </div>
             </div>
           </div>
@@ -166,3 +197,17 @@ export const ProjectDetail = () => {
     </div>
   );
 };
+
+const renderBulletList = (meta: any) => (
+  <ul className="text-gray-300 space-y-2">
+    {meta?.["First bullet point"] && meta["First bullet point"].length > 0 && (
+      <li>• {meta["First bullet point"]}</li>
+    )}
+    {meta?.["Second bullet point"] && meta["Second bullet point"].length > 0 && (
+      <li>• {meta["Second bullet point"]}</li>
+    )}
+    {meta?.["Third bullet point"] && meta["Third bullet point"].length > 0 && (
+      <li>• {meta["Third bullet point"]}</li>
+    )}
+  </ul>
+);

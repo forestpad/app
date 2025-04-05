@@ -1,7 +1,6 @@
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { WalletContextProvider } from '../WalletContextProvider';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { FaXTwitter, FaGithub } from 'react-icons/fa6';
 
 export const Header = () => {
   const navigate = useNavigate();

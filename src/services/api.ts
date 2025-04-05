@@ -1,5 +1,16 @@
 const API_BASE_URL = 'https://extra-api.sanctum.so/v1';
 
+export interface LstMetadata {
+  coingeckoId: string;
+  description: string;
+  external_uri: string | null;
+  image: string;
+  name: string;
+  symbol: string;
+  twitter: string;
+  website: string;
+}
+
 export interface LstPool {
   pool: string;
   program: string;
@@ -42,5 +53,18 @@ export const fetchLsts = async (): Promise<LstData[]> => {
   } catch (error) {
     console.error('Error fetching LSTs:', error);
     return [];
+  }
+};
+
+export const fetchLstMetadata = async (tokenMint: string): Promise<LstMetadata> => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/metadata/${tokenMint}`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch LST metadata');
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching LST metadata:', error);
+    throw error;
   }
 };

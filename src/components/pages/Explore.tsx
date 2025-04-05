@@ -58,7 +58,7 @@ export const Explore = () => {
               <div
                 key={index}
                 className="bg-[#1F2937] p-6 rounded-xl hover:bg-[#22C55E]/10 transition-all cursor-pointer"
-                onClick={() => navigate(`/detail/${lst.meta?.[`Mint address`]}`)}
+                onClick={() => navigate(`/detail/${lst.mint}`)}
               >
                 <div className="flex items-center gap-4 mb-4">
                   <img src={lst.logo_uri} alt={lst.name} className="w-12 h-12 rounded-full" />
