@@ -17,10 +17,10 @@ export const Hero = () => {
               Explore All
             </button>
             <button
-              onClick={() => navigate('/create')}
+              onClick={() => navigate('/launch')}
               className="px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 rounded-lg font-semibold transition-colors"
             >
-              Create
+              Launch
             </button>
           </div>
         </div>

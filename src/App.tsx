@@ -9,6 +9,7 @@ import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
 import { clusterApiUrl } from '@solana/web3.js';
 import { Explore } from './components/pages/Explore';
 import { ProjectDetail } from './components/pages/ProjectDetail';
+import { Launch } from './components/pages/Launch';
 
 const endpoint = clusterApiUrl('devnet');
 
@@ -26,6 +27,7 @@ function App() {
                     <Route path="/" element={<Hero />} />
                     <Route path="/explore" element={<Explore />} />
                     <Route path="/detail" element={<ProjectDetail />} />
+                    <Route path="/launch" element={<Launch />} />
                   </Routes>
                 </main>
                 <Footer />
