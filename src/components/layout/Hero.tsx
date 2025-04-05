@@ -1,4 +1,8 @@
+import { useNavigate } from 'react-router-dom';
+
 export const Hero = () => {
+  const navigate = useNavigate();
+  
   return (
     <div className="bg-[#0F1115] text-white pt-16">
       <section className="container mx-auto px-4 py-16">
@@ -6,10 +10,16 @@ export const Hero = () => {
           <h1 className="text-4xl sm:text-6xl font-bold mb-6">Earn Tokens While Staking Your Sol</h1>
           <p className="text-gray-400 text-lg mb-8">Secure, transparent, and user-friendly platform for SOL staking</p>
           <div className="flex gap-4 justify-center">
-            <button className="bg-[#6366F1] text-white px-8 py-4 rounded-xl hover:bg-[#4F46E5] transition-colors text-lg font-medium">
+            <button
+              onClick={() => navigate('/explore')}
+              className="px-8 py-3 bg-[#1E2128] hover:bg-[#2A2E37] rounded-lg font-semibold transition-colors"
+            >
               Explore All
             </button>
-            <button className="bg-[#22C55E] text-white px-8 py-4 rounded-xl hover:bg-[#16A34A] transition-colors text-lg font-medium">
+            <button
+              onClick={() => navigate('/create')}
+              className="px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 rounded-lg font-semibold transition-colors"
+            >
               Create
             </button>
           </div>

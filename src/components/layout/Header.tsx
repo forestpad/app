@@ -10,6 +10,12 @@ export const Header = () => {
       </div>
       <WalletContextProvider>
         <nav className="flex items-center gap-4">
+          <button
+              onClick={() => navigate('/explore')}
+              className="text-gray-600 hover:text-gray-900 text-base sm:text-lg"
+            >
+              Exploer
+          </button>
           <WalletMultiButton />
         </nav>
       </WalletContextProvider>
