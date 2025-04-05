@@ -1,6 +1,6 @@
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
-import { Hero } from './components/layout/Hero';
+import { Home } from './components/pages/Home';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { WalletContextProvider } from './components/WalletContextProvider';
 
@@ -24,7 +24,7 @@ function App() {
                 <Header />
                 <main className="flex-grow pt-[72px]">
                   <Routes>
-                    <Route path="/" element={<Hero />} />
+                    <Route path="/" element={<Home />} />
                     <Route path="/explore" element={<Explore />} />
                     <Route path="/detail" element={<ProjectDetail />} />
                     <Route path="/launch" element={<Launch />} />

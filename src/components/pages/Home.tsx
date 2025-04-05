@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 
-export const Hero = () => {
+export const Home = () => {
   const navigate = useNavigate();
-  
+
   return (
     <div className="bg-[#0F1115] text-white pt-16">
       <section className="container mx-auto px-4 py-16">
@@ -30,7 +30,7 @@ export const Hero = () => {
             <h2 className="text-3xl font-bold mb-4">How It Works</h2>
             <p className="text-gray-400 text-lg">Let's make staking SOL and earning tokens easy and secure</p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="bg-[#1F2937] p-8 rounded-2xl hover:bg-[#374151] transition-colors">
               <div className="w-12 h-12 bg-[#6366F1] rounded-2xl flex items-center justify-center mb-6 text-xl font-bold">1</div>
@@ -65,7 +65,9 @@ export const Hero = () => {
         <div className="mt-32 text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to Launch?</h2>
           <p className="text-gray-400 text-lg mb-8">We've built a platform that prioritizes security, transparency, and user experience</p>
-          <button className="bg-[#6366F1] text-white px-12 py-4 rounded-xl hover:bg-[#4F46E5] transition-colors text-lg font-medium">
+          <button
+            onClick={() => navigate('/launch')}
+            className="bg-[#6366F1] text-white px-12 py-4 rounded-xl hover:bg-[#4F46E5] transition-colors text-lg font-medium">
             Get Started
           </button>
         </div>
