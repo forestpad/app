@@ -1,6 +1,6 @@
-# Forrestpad App
+# Forestpad App
 
-A React-based application for the Forrestpad platform.
+A React-based application for the Forestpad platform.
 
 ## Tech Stack
 
