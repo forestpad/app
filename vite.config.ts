@@ -1,15 +1,31 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { createRequire } from 'module'
+const require = createRequire(import.meta.url)
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  server: {
-    port: 3000,
-    host: true
+  resolve: {
+    alias: {
+      crypto: 'crypto-browserify',
+      stream: 'stream-browserify',
+      buffer: 'buffer',
+      util: 'util',
+      assert: 'assert',
+      process: require.resolve('process/browser'),
+    },
   },
-  build: {
-    outDir: 'dist',
-    sourcemap: true
-  }
+  define: {
+    global: 'globalThis',
+    'process.env': {}, // 최소 환경 변수 선언
+  },
+  optimizeDeps: {
+    include: ['process', 'buffer'],
+    esbuildOptions: {
+      define: {
+        global: 'globalThis',
+        'process.env': '{}',
+      },
+    },
+  },
 })
