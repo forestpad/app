@@ -1,5 +1,4 @@
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
-import { WalletContextProvider } from '../WalletContextProvider';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 export const Header = () => {
@@ -41,9 +40,7 @@ export const Header = () => {
           </button>
         </nav>
 
-        <WalletContextProvider>
-          <WalletMultiButton />
-        </WalletContextProvider>
+        <WalletMultiButton />
       </div>
     </header>
   );
