@@ -64,7 +64,7 @@ export const Explore = () => {
             </div>
 
             <button
-              onClick={() => navigate('/stake/alpha')}
+              onClick={() => navigate('/detail')}
               className="w-full py-3 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 rounded-lg font-semibold transition-colors"
             >
               Stake Now
@@ -112,7 +112,7 @@ export const Explore = () => {
             </div>
 
             <button
-              onClick={() => navigate('/stake/beta')}
+              onClick={() => navigate('/detail')}
               className="w-full py-3 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 rounded-lg font-semibold transition-colors"
             >
               Stake Now
