@@ -1,4 +1,5 @@
 import { Header } from './components/layout/Header';
+import { Footer } from './components/layout/Footer';
 import { Hero } from './components/layout/Hero';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { WalletContextProvider } from './components/WalletContextProvider';
@@ -18,15 +19,16 @@ function App() {
         <WalletProvider wallets={[]} autoConnect>
           <WalletModalProvider>
             <WalletContextProvider>
-              <div className="flex flex-col min-h-screen bg-white pl-[240px]">
+              <div className="flex flex-col min-h-screen bg-white">
                 <Header />
-                <main className="flex-grow">
+                <main className="flex-grow pt-[72px]">
                   <Routes>
                     <Route path="/" element={<Hero />} />
                     <Route path="/explore" element={<Explore />} />
                     <Route path="/detail" element={<ProjectDetail />} />
                   </Routes>
                 </main>
+                <Footer />
               </div>
             </WalletContextProvider>
           </WalletModalProvider>
