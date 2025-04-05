@@ -48,6 +48,7 @@ export const swap = async (
     const signedTx = await signTransaction(transaction, connection);
     console.log(signedTx);
 
+    // @ts-ignore
     const signature = await connection.sendRawTransaction(signedTx.serialize(), {
         maxRetries: 2,
         skipPreflight: true

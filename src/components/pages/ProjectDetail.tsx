@@ -213,7 +213,7 @@ export const ProjectDetail = () => {
 
                 <button
                   onClick={handleStake}
-                  disabled={!stakeAmount || !publicKey}
+                  disabled={!stakeAmount}
                   className="w-full px-8 py-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Start Staking
