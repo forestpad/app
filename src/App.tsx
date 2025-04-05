@@ -18,7 +18,7 @@ function App() {
         <WalletProvider wallets={[]} autoConnect>
           <WalletModalProvider>
             <WalletContextProvider>
-              <div className="flex flex-col min-h-screen bg-white">
+              <div className="flex flex-col min-h-screen bg-white pl-[240px]">
                 <Header />
                 <main className="flex-grow">
                   <Routes>
