@@ -2,6 +2,7 @@ import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
 import { Home } from './components/pages/Home';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import { ScrollToTop } from './components/ScrollToTop';
 import { WalletContextProvider } from './components/WalletContextProvider';
 
 import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
@@ -16,6 +17,7 @@ const endpoint = clusterApiUrl('devnet');
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <ConnectionProvider endpoint={endpoint}>
         <WalletProvider wallets={[]} autoConnect>
           <WalletModalProvider>
