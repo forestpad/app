@@ -8,7 +8,7 @@ export const Footer = () => {
           <a href="#" className="text-gray-400 hover:text-white">
             <FaXTwitter className="w-5 h-5" />
           </a>
-          <a href="https://github.com/team-seoulana" className="text-gray-400 hover:text-white">
+          <a href="https://github.com/forestpad" className="text-gray-400 hover:text-white">
             <FaGithub className="w-5 h-5" />
           </a>
         </div>
