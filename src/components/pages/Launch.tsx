@@ -10,18 +10,39 @@ export const Launch = () => {
     sellerFeeBasisPoints: 0,
     creators: ''
   });
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<{[key: string]: string}>({});
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    if (name === 'sellerFeeBasisPoints') {
+      const numValue = parseInt(value);
+      if (isNaN(numValue)) {
+        setValidationErrors(prev => ({ ...prev, [name]: 'Please enter a valid number' }));
+        return;
+      }
+      if (numValue < 0 || numValue > 10000) {
+        setValidationErrors(prev => ({ ...prev, [name]: 'Value must be between 0 and 10000' }));
+        return;
+      }
+      setValidationErrors(prev => ({ ...prev, [name]: '' }));
+    }
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: name === 'sellerFeeBasisPoints' ? parseInt(value) || 0 : value
     }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const numValue = formData.sellerFeeBasisPoints;
+    if (numValue < 0 || numValue > 10000) {
+      setValidationErrors(prev => ({ ...prev, sellerFeeBasisPoints: 'Value must be between 0 and 10000' }));
+      return;
+    }
     console.log('Form submitted:', formData);
+    setShowSuccess(true);
+    setTimeout(() => setShowSuccess(false), 3000);
   };
 
   return (
@@ -60,7 +81,12 @@ export const Launch = () => {
         </section>
 
         {/* Staking Pool Creation Form */}
-        <div className="max-w-2xl mx-auto bg-gray-50 p-10 rounded-2xl shadow border">
+        <div className="max-w-2xl mx-auto bg-gray-50 p-10 rounded-2xl shadow border relative">
+          {showSuccess && (
+            <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
+              Staking pool creation submitted!
+            </div>
+          )}
           <h1 className="text-3xl font-bold text-green-600 mb-8 text-center">Create Staking Pool</h1>
           <form onSubmit={handleSubmit} className="space-y-6">
             {[
@@ -68,20 +94,25 @@ export const Launch = () => {
               { label: 'Token Symbol', name: 'symbol', type: 'text', placeholder: 'Enter token symbol' },
               { label: 'Metadata URI', name: 'uri', type: 'text', placeholder: 'Enter metadata URI' },
               { label: 'Original Token Address', name: 'originTokenAddress', type: 'text', placeholder: 'Enter original token address' },
-              { label: 'Seller Fee Basis Points (0-10000)', name: 'sellerFeeBasisPoints', type: 'number', placeholder: '' },
+              { label: 'Seller Fee Basis Points (0-10000)', name: 'sellerFeeBasisPoints', type: 'number', placeholder: '', min: 0, max: 10000 },
               { label: 'Creators (JSON string)', name: 'creators', type: 'text', placeholder: '[{"address":"...","share":100}]' },
             ].map(field => (
               <div key={field.name}>
-                <label className="block text-sm font-medium text-gray-700 mb-2">{field.label}</label>
+                <label className="block text-sm font-medium text-black mb-2">{field.label}</label>
                 <input
                   type={field.type}
                   name={field.name}
                   value={(formData as any)[field.name]}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-black"
                   placeholder={field.placeholder}
                   required={field.name !== 'creators'}
+                  min={field.name === 'sellerFeeBasisPoints' ? 0 : undefined}
+                  max={field.name === 'sellerFeeBasisPoints' ? 10000 : undefined}
                 />
+                {validationErrors[field.name] && (
+                  <p className="text-red-500 text-sm mt-1">{validationErrors[field.name]}</p>
+                )}
               </div>
             ))}
 
